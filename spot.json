@@ -1,0 +1,23 @@
+{
+ "titre": "<em>Nkap</em> API",
+ "type": "Documentation développeur · API de paiement",
+ "sous_titre": "Référence, exemples en 4 langages, console d'essai, erreurs, webhooks, recherche",
+ "couleur": "#059669",
+ "graine": 39,
+ "voix": [
+  [3.3, "Nkap API, une documentation pensée pour les développeurs,"],
+  [8.0, "chaque point d'accès s'essaie en direct, avec ses erreurs et ses webhooks,"],
+  [16.0, "en cURL, Node, Python ou PHP, et une recherche instantanée."]
+ ],
+ "etapes": [
+  {"t": "wait", "ms": 1500},
+  {"t": "eval", "js": "window.__ep('create')", "pause": 1500},
+  {"t": "eval", "js": "window.__send()", "pause": 1800},
+  {"t": "eval", "js": "window.__set('phone','0612345678');window.__send()", "pause": 1900},
+  {"t": "eval", "js": "window.__set('phone','+33612345678');window.__lang('py')", "pause": 1500},
+  {"t": "eval", "js": "window.__lang('js');window.__send()", "pause": 2600},
+  {"t": "eval", "js": "window.__ep('refund')", "pause": 1500},
+  {"t": "eval", "js": "window.__send()", "pause": 2200},
+  {"t": "eval", "js": "window.__q('idempo')", "pause": 2000}
+ ]
+}

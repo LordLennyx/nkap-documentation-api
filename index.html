@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nkap API — documentation développeur</title>
+<meta name="description" content="Documentation de l'API de paiement Nkap : guides, référence des points d'accès, exemples en cURL, JavaScript, Python et PHP, console d'essai interactive, webhooks et codes d'erreur.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111827'/%3E%3Cpath d='M9 23V9l14 14V9' stroke='%2334d399' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#111827;--mute:#6b7280;--line:#e5e7eb;--bg:#fff;--sf:#f9fafb;--acc:#059669;--acc-s:#ecfdf5;--code:#0d1117;--code2:#161b22}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.65 'Inter Tight',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+code,pre,.mono{font-family:'Fira Code',monospace}
+header{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:0 22px;position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);z-index:10}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16.5px}
+.logo i{width:26px;height:26px;border-radius:7px;background:var(--ink);display:grid;place-items:center}
+.logo small{font-weight:500;color:var(--mute);margin-left:4px}
+.search{flex:0 1 340px;margin-left:24px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:6px 10px;color:var(--mute);background:var(--sf);cursor:pointer;font-size:14px}
+.search kbd{margin-left:auto;font:500 11px 'Fira Code';border:1px solid var(--line);border-radius:5px;padding:1px 5px;background:#fff}
+.sp{flex:1}
+.hl{color:var(--mute);text-decoration:none;font-size:14px;font-weight:500}
+.mode{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;border:1px solid #fcd34d;background:#fffbeb;color:#92400e;border-radius:99px;padding:4px 11px}
+.mode i{width:7px;height:7px;border-radius:50%;background:#f59e0b}
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr) minmax(0,520px)}
+nav{border-right:1px solid var(--line);padding:18px 12px 40px;position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto;font-size:14px}
+nav h5{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--mute);margin:16px 10px 4px;font-weight:600}
+nav a{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:7px;color:#374151;text-decoration:none}
+nav a:hover{background:var(--sf)}nav a.on{background:var(--acc-s);color:var(--acc);font-weight:600}
+.vb{font:600 10px 'Fira Code';padding:1px 5px;border-radius:4px;min-width:38px;text-align:center}
+.vb.get{background:#dbeafe;color:#1d4ed8}.vb.post{background:#d1fae5;color:#047857}.vb.del{background:#fee2e2;color:#b91c1c}
+main{padding:34px 40px 80px;min-width:0}
+.ep{padding-bottom:40px;margin-bottom:40px;border-bottom:1px solid var(--line);scroll-margin-top:76px}
+.ep:last-child{border:0}
+h1{font-size:34px;line-height:1.15;letter-spacing:-.025em;font-weight:700}
+h2{font-size:24px;letter-spacing:-.02em;font-weight:700;margin-bottom:6px}
+h3{font-size:14px;font-weight:600;margin:22px 0 8px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}
+p{color:#374151;max-width:68ch}
+p code,li code,td code{font-size:13px;background:var(--sf);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.path{display:inline-flex;align-items:center;gap:10px;margin:6px 0 12px;font:500 14px 'Fira Code';background:var(--sf);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.prm{border-top:1px solid var(--line)}
+.prm>div{padding:12px 0;border-bottom:1px solid var(--line)}
+.prm b{font:500 14px 'Fira Code'}.prm em{font-style:normal;color:var(--mute);font-size:13px;margin-left:8px}
+.prm .req{color:#dc2626;font-size:12px;font-weight:600;margin-left:8px}
+.prm p{font-size:14px;margin-top:3px}
+.call{display:flex;gap:12px;padding:14px 16px;border-radius:10px;margin:16px 0;font-size:14px}
+.call.i{background:#eff6ff;color:#1e40af}.call.w{background:#fffbeb;color:#92400e}
+.steps{counter-reset:s;display:grid;gap:12px;margin-top:16px}
+.steps div{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px}
+.steps div::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px}
+.steps b{display:block}.steps p{font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+/* colonne de code */
+.side{background:var(--code);position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto;padding:22px 20px 40px;color:#c9d1d9}
+.cb{background:var(--code2);border:1px solid #30363d;border-radius:12px;margin-bottom:16px;overflow:hidden}
+.cb .hd{display:flex;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid #30363d}
+.cb .hd b{font:500 12.5px 'Inter Tight';color:#8b949e;margin:0 8px 0 4px}
+.cb .hd button{border:0;background:none;color:#8b949e;font-size:12.5px;padding:4px 9px;border-radius:6px;font-weight:500}
+.cb .hd button.on{background:#30363d;color:#fff}
+.cb .hd .cp{margin-left:auto}
+.cb pre{padding:14px 16px;font-size:12.8px;line-height:1.65;overflow:auto;white-space:pre;max-height:340px}
+.k{color:#ff7b72}.s{color:#a5d6ff}.n{color:#79c0ff}.c{color:#8b949e}.f{color:#d2a8ff}.p{color:#7ee787}
+.try{background:var(--code2);border:1px solid #30363d;border-radius:12px;padding:14px}
+.try h4{color:#fff;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.try label{display:block;font-size:12px;color:#8b949e;margin:8px 0 3px}
+.try input,.try select{width:100%;background:var(--code);border:1px solid #30363d;border-radius:7px;padding:7px 9px;color:#e6edf3;font:13px 'Fira Code';outline:0}
+.try input:focus{border-color:#34d399}
+.try .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.send{width:100%;margin-top:12px;background:#34d399;color:#052e16;border:0;border-radius:8px;padding:9px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.send:disabled{opacity:.6}
+.res{margin-top:12px;display:none}
+.res.on{display:block}
+.res .st{display:flex;gap:10px;align-items:center;font:500 12.5px 'Fira Code';margin-bottom:6px}
+.res .st b{padding:2px 8px;border-radius:5px}
+.st .ok{background:#064e3b;color:#6ee7b7}.st .er{background:#7f1d1d;color:#fca5a5}
+.res pre{background:var(--code);border-radius:8px;padding:12px;font-size:12.5px;max-height:300px;overflow:auto}
+.hook{margin-top:16px}
+.hook .hk{font:12px/1.55 'Fira Code';background:var(--code);border-left:3px solid #34d399;border-radius:6px;padding:8px 10px;margin-top:8px;animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}}
+.pal{position:fixed;inset:0;background:rgba(17,24,39,.4);display:none;align-items:flex-start;justify-content:center;padding-top:12vh;z-index:40}
+.pal.on{display:flex}
+.pal .bx{background:#fff;border-radius:14px;width:560px;max-width:92vw;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);overflow:hidden}
+.pal input{width:100%;border:0;border-bottom:1px solid var(--line);padding:14px 16px;font-size:16px;outline:0}
+.pal .rs{max-height:340px;overflow:auto;padding:6px}
+.pal .rs a{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;color:inherit;text-decoration:none;font-size:14px}
+.pal .rs a.on,.pal .rs a:hover{background:var(--acc-s)}
+.pal .rs small{color:var(--mute);margin-left:auto}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:8px 14px;border-radius:9px;opacity:0;transition:.3s;font-size:13.5px;font-weight:600;z-index:50}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1250px){.wrap{grid-template-columns:220px minmax(0,1fr)}.side{grid-column:2;position:static;height:auto}}
+@media (max-width:820px){.wrap{grid-template-columns:1fr}nav{display:none}.side{grid-column:1}main{padding:24px 16px 40px}header{padding:0 14px;gap:10px}.search{margin-left:0;flex:1}.search span,.hl,.mode{display:none}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header><span class="logo"><i><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 11V3l8 8V3" stroke="#34d399" stroke-width="2" fill="none"/></svg></i>Nkap<small>API v2</small></span>
+<div class="search" id="sbtn"><svg width="15" height="15" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6"/></svg><span>Rechercher dans la documentation</span><kbd>Ctrl K</kbd></div>
+<span class="sp"></span><a class="hl" href="#erreurs">Erreurs</a><a class="hl" href="#journal">Journal des versions</a><span class="mode"><i></i>Mode test</span></header>
+<div class="wrap">
+<nav id="nav"><h5>Démarrer</h5><a href="#intro" class="on">Introduction</a><a href="#auth">Authentification</a><a href="#demarrage">Premier paiement en 5 min</a>
+<h5>Paiements</h5><a href="#create"><span class="vb post">POST</span>Créer un paiement</a><a href="#get"><span class="vb get">GET</span>Consulter un paiement</a><a href="#list"><span class="vb get">GET</span>Lister les paiements</a><a href="#refund"><span class="vb post">POST</span>Rembourser</a>
+<h5>Clients</h5><a href="#customer"><span class="vb post">POST</span>Créer un client</a><a href="#delcust"><span class="vb del">DEL</span>Supprimer un client</a>
+<h5>Référence</h5><a href="#webhooks">Webhooks</a><a href="#erreurs">Codes d'erreur</a><a href="#journal">Journal des versions</a></nav>
+<main id="main">
+<section class="ep" id="intro"><p style="color:var(--acc);font-weight:600;font-size:14px">Documentation développeur</p><h1>Encaissez par carte, wallet et Mobile Money avec une seule API.</h1><p style="margin-top:12px;font-size:16.5px">L'API Nkap est une API REST : URL orientées ressources, corps JSON, codes HTTP standards et authentification par clé. Chaque exemple de cette page fonctionne dans la console à droite, en mode test, sans créer de compte.</p>
+<div class="call i"><svg width="18" height="18" viewBox="0 0 18 18" style="flex:none;margin-top:2px"><circle cx="9" cy="9" r="8" fill="#3b82f6"/><path d="M9 8v5M9 5.2v.3" stroke="#fff" stroke-width="2"/></svg><span>URL de base : <code>https://api.nkap.io/v2</code>. Les montants sont exprimés en centimes : <code>4900</code> signifie 49,00 €.</span></div></section>
+<section class="ep" id="auth"><h2>Authentification</h2><p>Envoyez votre clé secrète dans l'en-tête <code>Authorization</code>. Les clés de test commencent par <code>sk_test_</code> et n'effectuent aucun mouvement réel. Ne publiez jamais une clé secrète dans du code côté navigateur.</p>
+<div class="call w"><svg width="18" height="18" viewBox="0 0 18 18" style="flex:none;margin-top:2px"><path d="M9 1.5l8 14H1z" fill="#f59e0b"/><path d="M9 7v3.5M9 12.5v.4" stroke="#fff" stroke-width="2"/></svg><span>Clé de démonstration utilisable dans la console : <code>sk_test_nkap51DemoQx8Lm2Vb7Ty</code></span></div></section>
+<section class="ep" id="demarrage"><h2>Premier paiement en 5 minutes</h2><div class="steps"><div><span><b>Créez le paiement côté serveur</b><p>Appelez <code>POST /payments</code> avec le montant, la devise et le numéro du payeur.</p></span></div><div><span><b>Le client confirme sur son téléphone</b><p>Il reçoit une demande de validation et saisit son code. Le statut passe de <code>pending</code> à <code>succeeded</code>.</p></span></div><div><span><b>Recevez le webhook</b><p>Nkap appelle votre URL avec l'événement <code>payment.succeeded</code>. Livrez la commande à ce moment-là, pas avant.</p></span></div></div></section>
+<section class="ep" id="create" data-ep="create"><h2>Créer un paiement</h2><div class="path"><span class="vb post">POST</span>/v2/payments</div><p>Crée une demande de paiement. Pour le Mobile Money, le payeur reçoit une notification de confirmation ; pour la carte, l'URL <code>redirect_url</code> renvoie vers la page 3-D Secure.</p>
+<h3>Paramètres du corps</h3><div class="prm"><div><b>amount</b><em>entier</em><span class="req">requis</span><p>Montant en centimes, entre 50 (0,50 €) et 1 000 000 (10 000 €).</p></div><div><b>currency</b><em>chaîne</em><span class="req">requis</span><p>Code ISO 4217. <code>EUR</code> par défaut ; <code>GBP</code> et <code>CHF</code> sont aussi acceptés.</p></div><div><b>method</b><em>chaîne</em><span class="req">requis</span><p><code>mobile_money</code> ou <code>card</code>.</p></div><div><b>phone</b><em>chaîne</em><p>Numéro du payeur au format international, requis pour <code>mobile_money</code>.</p></div><div><b>description</b><em>chaîne</em><p>Libellé affiché sur le relevé du client, 60 caractères au plus.</p></div><div><b>metadata</b><em>objet</em><p>Jusqu'à 20 paires clé-valeur pour relier le paiement à votre commande.</p></div></div>
+<h3>En-tête facultatif</h3><div class="prm"><div><b>Idempotency-Key</b><em>chaîne</em><p>Rejouer une requête avec la même clé renvoie le même paiement au lieu d'en créer un second.</p></div></div></section>
+<section class="ep" id="get" data-ep="get"><h2>Consulter un paiement</h2><div class="path"><span class="vb get">GET</span>/v2/payments/:id</div><p>Renvoie un paiement à partir de son identifiant. Utile pour vérifier un statut si un webhook n'a pas été reçu.</p></section>
+<section class="ep" id="list" data-ep="list"><h2>Lister les paiements</h2><div class="path"><span class="vb get">GET</span>/v2/payments</div><p>Renvoie les paiements du plus récent au plus ancien, paginés par curseur.</p><h3>Paramètres de requête</h3><div class="prm"><div><b>limit</b><em>entier</em><p>Entre 1 et 100, 10 par défaut.</p></div><div><b>status</b><em>chaîne</em><p>Filtre : <code>pending</code>, <code>succeeded</code>, <code>failed</code>, <code>refunded</code>.</p></div></div></section>
+<section class="ep" id="refund" data-ep="refund"><h2>Rembourser</h2><div class="path"><span class="vb post">POST</span>/v2/payments/:id/refund</div><p>Rembourse tout ou partie d'un paiement réussi. Le remboursement est crédité sur le moyen de paiement d'origine.</p><h3>Paramètres du corps</h3><div class="prm"><div><b>amount</b><em>entier</em><p>Montant à rembourser ; le total par défaut.</p></div></div></section>
+<section class="ep" id="customer" data-ep="customer"><h2>Créer un client</h2><div class="path"><span class="vb post">POST</span>/v2/customers</div><p>Enregistre un client pour réutiliser ses moyens de paiement et suivre son historique.</p><h3>Paramètres du corps</h3><div class="prm"><div><b>name</b><em>chaîne</em><span class="req">requis</span><p>Nom complet.</p></div><div><b>phone</b><em>chaîne</em><span class="req">requis</span><p>Numéro au format international.</p></div><div><b>email</b><em>chaîne</em><p>Adresse électronique pour l'envoi des reçus.</p></div></div></section>
+<section class="ep" id="delcust" data-ep="delcust"><h2>Supprimer un client</h2><div class="path"><span class="vb del">DELETE</span>/v2/customers/:id</div><p>Supprime définitivement un client. Les paiements passés restent consultables.</p></section>
+<section class="ep" id="webhooks"><h2>Webhooks</h2><p>Nkap envoie une requête <code>POST</code> signée à votre URL pour chaque événement. Vérifiez la signature <code>Nkap-Signature</code> (HMAC SHA-256 du corps avec votre secret de webhook) et répondez <code>200</code> en moins de 10 secondes ; sinon l'envoi est retenté pendant 72 heures.</p>
+<table><thead><tr><th>Événement</th><th>Quand</th></tr></thead><tbody><tr><td><code>payment.succeeded</code></td><td>Le payeur a confirmé et les fonds sont réservés.</td></tr><tr><td><code>payment.failed</code></td><td>Refus, solde insuffisant ou délai dépassé.</td></tr><tr><td><code>refund.created</code></td><td>Un remboursement a été émis.</td></tr><tr><td><code>customer.deleted</code></td><td>Un client a été supprimé.</td></tr></tbody></table></section>
+<section class="ep" id="erreurs"><h2>Codes d'erreur</h2><p>Les erreurs renvoient un objet <code>error</code> avec un <code>code</code> stable, un message lisible et le paramètre en cause.</p>
+<table><thead><tr><th>HTTP</th><th>Code</th><th>Signification</th></tr></thead><tbody><tr><td>400</td><td><code>parameter_invalid</code></td><td>Un paramètre est absent ou mal formé.</td></tr><tr><td>401</td><td><code>authentication_failed</code></td><td>Clé absente, inconnue ou révoquée.</td></tr><tr><td>402</td><td><code>insufficient_funds</code></td><td>Le compte du payeur est insuffisant.</td></tr><tr><td>404</td><td><code>resource_missing</code></td><td>L'identifiant n'existe pas.</td></tr><tr><td>409</td><td><code>idempotency_conflict</code></td><td>Même clé d'idempotence, corps différent.</td></tr><tr><td>429</td><td><code>rate_limited</code></td><td>Plus de 100 requêtes par seconde.</td></tr></tbody></table></section>
+<section class="ep" id="journal"><h2>Journal des versions</h2><table><tbody><tr><td class="mono" style="white-space:nowrap">2026-10-14</td><td>Paramètre <code>metadata</code> sur les clients. Pagination par curseur sur toutes les listes.</td></tr><tr><td class="mono">2026-07-02</td><td>Remboursements partiels. Événement <code>refund.created</code>.</td></tr><tr><td class="mono">2026-03-20</td><td>Sortie de la v2 : montants entiers, en-tête <code>Idempotency-Key</code>, signatures HMAC.</td></tr></tbody></table></section>
+</main>
+<aside class="side" id="side">
+<div class="cb"><div class="hd"><b id="cbt">POST /v2/payments</b><span id="langs"></span><button class="cp" id="cpy">Copier</button></div><pre id="code"></pre></div>
+<div class="try" id="try"></div>
+<div class="hook" id="hook"></div>
+</aside></div>
+<div class="pal" id="pal"><div class="bx"><input id="q" placeholder="Rechercher un point d'accès, un paramètre, une erreur…" autocomplete="off"><div class="rs" id="rs"></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._);t._=setTimeout(()=>t.classList.remove('on'),1800)}
+const KEY='sk_test_nkap51DemoQx8Lm2Vb7Ty';
+const EP={create:{m:'POST',p:'/v2/payments',f:[['amount','4900'],['phone','+33612345678'],['method','mobile_money',['mobile_money','card']],['description','Commande #4821']],body:v=>({amount:+v.amount,currency:'EUR',method:v.method,phone:v.phone,description:v.description,metadata:{order_id:'4821'}})},
+ get:{m:'GET',p:'/v2/payments/:id',f:[['id','pay_8Kx2Lm4Qa9']]},list:{m:'GET',p:'/v2/payments',f:[['limit','3'],['status','succeeded',['','pending','succeeded','failed','refunded']]]},
+ refund:{m:'POST',p:'/v2/payments/:id/refund',f:[['id','pay_8Kx2Lm4Qa9'],['amount','1500']],body:v=>({amount:+v.amount})},
+ customer:{m:'POST',p:'/v2/customers',f:[['name','Claire Martin'],['phone','+33612345678'],['email','claire.martin@exemple.fr']],body:v=>({name:v.name,phone:v.phone,email:v.email})},
+ delcust:{m:'DELETE',p:'/v2/customers/:id',f:[['id','cus_3Fh7Wq2Zr1']]}};
+let cur='create',lang='curl',V={};
+const url=(e,v)=>'https://api.nkap.io'+e.p.replace(':id',v.id||':id')+(e.m==='GET'&&!e.p.includes(':id')?'?'+e.f.filter(f=>v[f[0]]).map(f=>f[0]+'='+v[f[0]]).join('&'):'');
+// coloration syntaxique minimale
+function hlJson(o){return esc(JSON.stringify(o,null,2)).replace(/"([^"]+)":/g,'<span class="n">"$1"</span>:').replace(/: "([^"]*)"/g,': <span class="s">"$1"</span>').replace(/: (-?\d+)/g,': <span class="f">$1</span>').replace(/: (true|false|null)/g,': <span class="k">$1</span>')}
+function code(){const e=EP[cur],v=V[cur],b=e.body?e.body(v):null,u=url(e,v);let s='';
+ if(lang==='curl')s=`<span class="p">curl</span> ${e.m!=='GET'?`-X ${e.m} `:''}<span class="s">${u}</span> \\\n  -H <span class="s">"Authorization: Bearer ${KEY.slice(0,12)}…"</span>${b?` \\\n  -H <span class="s">"Content-Type: application/json"</span>${cur==='create'?` \\\n  -H <span class="s">"Idempotency-Key: cmd-4821"</span>`:''} \\\n  -d <span class="s">'${esc(JSON.stringify(b))}'</span>`:''}`;
+ else if(lang==='js')s=`<span class="k">import</span> Nkap <span class="k">from</span> <span class="s">'@nkap/node'</span>;\n<span class="k">const</span> nkap = <span class="k">new</span> <span class="f">Nkap</span>(process.env.<span class="n">NKAP_SECRET_KEY</span>);\n\n<span class="k">const</span> res = <span class="k">await</span> nkap.${{create:'payments.<span class="f">create</span>',get:'payments.<span class="f">retrieve</span>',list:'payments.<span class="f">list</span>',refund:'payments.<span class="f">refund</span>',customer:'customers.<span class="f">create</span>',delcust:'customers.<span class="f">del</span>'}[cur]}(${v.id?`<span class="s">'${v.id}'</span>${b?', ':''}`:''}${b?hlJson(b).replace(/<span class="n">"(\w+)"<\/span>/g,'<span class="n">$1</span>'):(cur==='list'?`{ limit: <span class="f">${v.limit}</span>${v.status?`, status: <span class="s">'${v.status}'</span>`:''} }`:'')});\nconsole.<span class="f">log</span>(res.<span class="n">status</span>);`;
+ else if(lang==='py')s=`<span class="k">import</span> nkap\nnkap.api_key = os.environ[<span class="s">"NKAP_SECRET_KEY"</span>]\n\nres = nkap.${{create:'Payment.<span class="f">create</span>',get:'Payment.<span class="f">retrieve</span>',list:'Payment.<span class="f">list</span>',refund:'Payment.<span class="f">refund</span>',customer:'Customer.<span class="f">create</span>',delcust:'Customer.<span class="f">delete</span>'}[cur]}(${v.id?`<span class="s">"${v.id}"</span>${b?', ':''}`:''}${b?'\n    '+Object.entries(b).map(([k,x])=>`${k}=${typeof x==='string'?`<span class="s">"${esc(x)}"</span>`:typeof x==='object'?`<span class="s">${esc(JSON.stringify(x))}</span>`:`<span class="f">${x}</span>`}`).join(',\n    ')+'\n':cur==='list'?`limit=<span class="f">${v.limit}</span>`:''})`;
+ else s=`<span class="k">$</span>nkap = <span class="k">new</span> \\Nkap\\<span class="f">Client</span>(<span class="f">getenv</span>(<span class="s">'NKAP_SECRET_KEY'</span>));\n<span class="k">$</span>res = <span class="k">$</span>nkap-&gt;${{create:'payments-&gt;<span class="f">create</span>',get:'payments-&gt;<span class="f">retrieve</span>',list:'payments-&gt;<span class="f">all</span>',refund:'payments-&gt;<span class="f">refund</span>',customer:'customers-&gt;<span class="f">create</span>',delcust:'customers-&gt;<span class="f">delete</span>'}[cur]}(${v.id?`<span class="s">'${v.id}'</span>${b?', ':''}`:''}${b?'[\n'+Object.entries(b).map(([k,x])=>`  <span class="s">'${k}'</span> =&gt; ${typeof x==='string'?`<span class="s">'${esc(x)}'</span>`:typeof x==='object'?`[<span class="s">'order_id'</span> =&gt; <span class="s">'4821'</span>]`:`<span class="f">${x}</span>`}`).join(',\n')+'\n]':''});`;
+ $('#code').innerHTML=s;$('#cbt').textContent=e.m+' '+e.p}
+$('#langs').innerHTML=[['curl','cURL'],['js','Node.js'],['py','Python'],['php','PHP']].map(([k,n])=>`<button data-l="${k}" class="${k===lang?'on':''}">${n}</button>`).join('');
+$('#langs').onclick=e=>{const b=e.target.closest('button');if(!b)return;lang=b.dataset.l;$$('#langs button').forEach(x=>x.classList.toggle('on',x===b));code()};
+$('#cpy').onclick=()=>{try{navigator.clipboard.writeText($('#code').innerText)}catch(e){}toast('Exemple copié')};
+Object.keys(EP).forEach(k=>V[k]=Object.fromEntries(EP[k].f.map(f=>[f[0],f[1]])));V._key=KEY;
+function tryForm(){const e=EP[cur];$('#try').innerHTML=`<h4><svg width="15" height="15" viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z" fill="#34d399"/></svg>Essayer · ${e.m} ${e.p}</h4><label>Clé secrète</label><input id="k" value="${V._key}">${e.f.map(([n,d,opt])=>`<label>${n}</label>${opt?`<select data-f="${n}">${opt.map(o=>`<option ${o===V[cur][n]?'selected':''} value="${o}">${o||'(tous)'}</option>`).join('')}</select>`:`<input data-f="${n}" value="${esc(V[cur][n])}">`}`).join('')}<button class="send" id="send"><span>Envoyer la requête</span></button><div class="res" id="res"></div>`;
+ $('#try').oninput=ev=>{const f=ev.target.dataset.f;if(f)V[cur][f]=ev.target.value;if(ev.target.id==='k')V._key=ev.target.value;code()};$('#send').onclick=send}
+// serveur simulé : validation, statuts, idempotence, webhooks
+const DB={pay_8Kx2Lm4Qa9:{id:'pay_8Kx2Lm4Qa9',object:'payment',amount:7500,currency:'EUR',method:'mobile_money',status:'succeeded',refunded:0,created:1793520000}},CUS={cus_3Fh7Wq2Zr1:{id:'cus_3Fh7Wq2Zr1'}};
+const rid=p=>p+'_'+Math.random().toString(36).slice(2,12);const err=(h,c,m,param)=>[h,{error:{type:h===401?'authentication_error':'invalid_request_error',code:c,message:m,...(param?{param}:{})}}];
+function server(k,v){if(!/^sk_test_[A-Za-z0-9]{16,}$/.test(V._key))return err(401,'authentication_failed','Clé d\'API invalide. Utilisez une clé commençant par sk_test_.');
+ if(k==='create'){const a=+v.amount;if(!v.amount||!Number.isInteger(a))return err(400,'parameter_invalid','amount doit être un entier.','amount');if(a<50||a>1e6)return err(400,'parameter_invalid','amount doit être compris entre 50 et 1 000 000 centimes.','amount');if(v.method==='mobile_money'&&!/^\+\d{9,15}$/.test(v.phone))return err(400,'parameter_invalid','phone doit être au format international, par exemple +33612345678.','phone');
+  if(a===66666)return err(402,'insufficient_funds','Le solde du payeur est insuffisant.');const p={id:rid('pay'),object:'payment',amount:a,currency:'EUR',method:v.method,status:'pending',phone:v.phone,description:v.description,refunded:0,metadata:{order_id:'4821'},created:Math.floor(Date.now()/1000),next_action:v.method==='card'?{type:'redirect',url:'https://pay.nkap.io/3ds/'+rid('s')}:{type:'confirm_on_phone',expires_in:120}};DB[p.id]=p;
+  setTimeout(()=>{p.status='succeeded';hook('payment.succeeded',{id:p.id,amount:p.amount,status:'succeeded'})},2200);return [201,p]}
+ if(k==='get'){const p=DB[v.id];return p?[200,p]:err(404,'resource_missing',`Aucun paiement avec l'identifiant ${v.id}.`,'id')}
+ if(k==='list'){const n=Math.min(100,Math.max(1,+v.limit||10));let L=Object.values(DB);if(v.status)L=L.filter(p=>p.status===v.status);return [200,{object:'list',data:L.slice(0,n),has_more:L.length>n}]}
+ if(k==='refund'){const p=DB[v.id];if(!p)return err(404,'resource_missing',`Aucun paiement avec l'identifiant ${v.id}.`,'id');if(p.status!=='succeeded'&&p.status!=='partially_refunded')return err(400,'payment_not_refundable','Seul un paiement réussi peut être remboursé.');const a=+v.amount||p.amount-p.refunded;if(a>p.amount-p.refunded)return err(400,'parameter_invalid',`Le montant dépasse le reste remboursable (${p.amount-p.refunded}).`,'amount');p.refunded+=a;p.status=p.refunded===p.amount?'refunded':'partially_refunded';const r={id:rid('re'),object:'refund',amount:a,payment:p.id,status:'succeeded'};setTimeout(()=>hook('refund.created',{id:r.id,amount:a,payment:p.id}),900);return [200,r]}
+ if(k==='customer'){if(!v.name)return err(400,'parameter_invalid','name est requis.','name');if(!/^\+\d{9,15}$/.test(v.phone))return err(400,'parameter_invalid','phone doit être au format international.','phone');const c={id:rid('cus'),object:'customer',name:v.name,phone:v.phone,email:v.email||null,created:Math.floor(Date.now()/1000)};CUS[c.id]=c;return [201,c]}
+ if(k==='delcust'){if(!CUS[v.id])return err(404,'resource_missing',`Aucun client avec l'identifiant ${v.id}.`,'id');delete CUS[v.id];setTimeout(()=>hook('customer.deleted',{id:v.id}),700);return [200,{id:v.id,object:'customer',deleted:true}]}}
+async function send(){const b=$('#send');b.disabled=true;b.innerHTML='<span>Envoi…</span>';const t0=performance.now();await new Promise(r=>setTimeout(r,280+Math.random()*260));const [h,body]=server(cur,V[cur]);const ms=Math.round(performance.now()-t0);
+ const res=$('#res');res.innerHTML=`<div class="st"><b class="${h<300?'ok':'er'}">${h} ${({200:'OK',201:'Created',400:'Bad Request',401:'Unauthorized',402:'Payment Required',404:'Not Found'})[h]}</b><span style="color:#8b949e">${ms} ms · req_${Math.random().toString(36).slice(2,9)}</span></div><pre>${hlJson(body)}</pre>`;res.classList.add('on');b.disabled=false;b.innerHTML='<span>Envoyer la requête</span>';
+ if(cur==='create'&&h===201){V.get.id=body.id;V.refund.id=body.id}if(cur==='customer'&&h===201)V.delcust.id=body.id}
+function hook(ev,data){const d=document.createElement('div');d.className='hk';d.innerHTML=`<span style="color:#8b949e">${new Date().toTimeString().slice(0,8)} · POST https://votre-site.fr/webhooks/nkap</span><br><span class="p">${ev}</span> ${esc(JSON.stringify(data))}<br><span style="color:#8b949e">Nkap-Signature: t=${Math.floor(Date.now()/1000)},v1=${[...Array(16)].map(()=>Math.floor(Math.random()*16).toString(16)).join('')}… · réponse 200</span>`;if(!$('#hook h4'))$('#hook').innerHTML='<h4 style="color:#fff;font-size:14px">Webhooks reçus</h4>';$('#hook h4').after(d)}
+function setEp(k){if(!EP[k]||k===cur)return;cur=k;code();tryForm()}
+// navigation : l'exemple suit la section visible
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){$$('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id));if(en.target.dataset.ep)setEp(en.target.dataset.ep)}}),{rootMargin:'-30% 0px -60% 0px'});$$('.ep').forEach(s=>io.observe(s));
+// recherche Ctrl+K
+const IDX=$$('.ep').flatMap(s=>{const h=s.querySelector('h2,h1').textContent;const items=[{t:h,id:s.id,k:'Section'}];s.querySelectorAll('.prm b').forEach(b=>items.push({t:b.textContent,id:s.id,k:h}));s.querySelectorAll('td code').forEach(c=>items.push({t:c.textContent,id:s.id,k:h}));return items});
+let sel=0,hits=[];function openPal(){$('#pal').classList.add('on');$('#q').value='';search();setTimeout(()=>$('#q').focus(),20)}
+function search(){const q=$('#q').value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');hits=IDX.filter(i=>i.t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(q)).slice(0,9);sel=0;drawRs()}
+function drawRs(){$('#rs').innerHTML=hits.map((h,i)=>`<a href="#${h.id}" class="${i===sel?'on':''}"><b class="mono" style="font-weight:500;font-size:13.5px">${esc(h.t)}</b><small>${esc(h.k)}</small></a>`).join('')||'<p style="padding:12px;color:var(--mute)">Aucun résultat</p>'}
+$('#q').oninput=search;$('#q').onkeydown=e=>{if(e.key==='ArrowDown'){sel=Math.min(hits.length-1,sel+1);drawRs();e.preventDefault()}if(e.key==='ArrowUp'){sel=Math.max(0,sel-1);drawRs();e.preventDefault()}if(e.key==='Enter'&&hits[sel]){location.hash=hits[sel].id;$('#pal').classList.remove('on')}if(e.key==='Escape')$('#pal').classList.remove('on')};
+$('#rs').onclick=()=>$('#pal').classList.remove('on');$('#pal').onclick=e=>{if(e.target.id==='pal')$('#pal').classList.remove('on')};$('#sbtn').onclick=openPal;
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPal()}});
+window.__ep=k=>{document.getElementById(k).scrollIntoView({behavior:'smooth'});setTimeout(()=>setEp(k),400)};window.__set=(f,v)=>{V[cur][f]=v;tryForm();code()};window.__send=send;window.__lang=l=>$(`#langs [data-l="${l}"]`).click();
+window.__q=async t=>{openPal();for(const c of t){$('#q').value+=c;search();await new Promise(r=>setTimeout(r,60))}};
+code();tryForm();
+</script>
+</body>
+</html>
